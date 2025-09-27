@@ -1,3 +1,16 @@
 # Ignore node
 node_modules/
-
+.env
+.DS_Store
+npm-debug.log
+yarn-error.log
+.vscode/
+.idea/
+dist/
+build/
+coverage/
+*.log
+*.env
+*.sqlite
+*.sqlite3
+*.db
