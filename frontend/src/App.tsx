@@ -59,7 +59,7 @@ function App() {
         return;
       }
 
-      if (!isValidWord(currentGuess)) {
+      if (await !isValidWord(currentGuess)) {
         setShowInvalidWord(true);
         triggerShake();
         setTimeout(() => setShowInvalidWord(false), 2000);

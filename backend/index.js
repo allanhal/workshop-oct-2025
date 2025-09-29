@@ -9,7 +9,20 @@ const port = process.env.PORT || 8080;
 
 const all5Words = fs.readFileSync("../all5.csv", "utf-8");
 
-const wordToday = "mesmo";
+function getWordOfTheDay() {
+  const startDate = new Date(2022, 0, 1); // January 1, 2024
+  const today = new Date();
+  const diffTime = Math.abs(today - startDate);
+  const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
+  const wordsArray = all5Words
+    .split(",")
+    .map((w) => w.trim())
+    .filter((w) => w.length === 5);
+
+  return wordsArray[diffDays % wordsArray.length];
+}
+
+const wordToday = getWordOfTheDay();
 
 app.use(cors());
 
@@ -18,12 +31,17 @@ app.get("/", (_, res) => {
   res.send(`Hello World!`);
 });
 
+// http://localhost:8080/today
+app.get("/today", (_, res) => {
+  res.send(wordToday);
+});
+
 // http://localhost:8080/all
 app.get("/all", (_, res) => {
   res.send(all5Words);
 });
 
-// http://localhost:8080/guess?word=aaaaa
+// http://localhost:8080/guess?word=mesma
 app.get("/guess", (req, res) => {
   const { word } = req.query;
   if (!word || typeof word !== "string" || word.length !== 5) {
