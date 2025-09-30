@@ -4,15 +4,18 @@ import { useEffect, useState } from 'react';
 import GameStatsModal from './components/GameStats';
 import Grid from './components/Grid';
 import Keyboard from './components/Keyboard';
+import LoginModal from './components/LoginModal';
+import useStore from './store';
 import {
     API, checkGuess, getGameStats, getKeyboardStatus, LetterStatus, updateGameStats
 } from './utils/gameLogic';
 import { isValidWord } from './utils/words';
 
 function App() {
+  const { profile, setProfile } = useStore();
+  const [showLogin, setShowLogin] = useState(false);
   const [username, setUsername] = useState("allan");
   const [password, setPassword] = useState("123456");
-  const [profile, setProfile] = useState();
   const [token, setToken] = useState(localStorage.getItem("token") || "");
   const [message, setMessage] = useState("");
 
@@ -54,8 +57,8 @@ function App() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        console.log(1);
-        console.log(await getProfile());
+        // console.log(1);
+        // console.log(await getProfile());
       } catch (err) {
         console.error(err);
       }
@@ -63,7 +66,6 @@ function App() {
 
     // call it
     fetchData();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
@@ -143,11 +145,23 @@ function App() {
     <div className="min-h-screen bg-gray-50 flex flex-col">
       <header className="bg-white border-b border-gray-200 p-4">
         <div className="max-w-lg mx-auto flex items-center justify-between">
+          {/* button for chart */}
+          <button
+            className="text-gray-500 hover:text-gray-700"
+            onClick={() => setShowStats(true)}
+          >
+            📈
+          </button>
           <h1 className="text-3xl font-bold text-gray-800">Termo</h1>
+          <button onClick={increase}>Increase</button>
+          <button onClick={decrease} style={{ margin: "0 10px" }}>
+            Decrease
+          </button>
+          <button onClick={reset}>Reset</button>
+          <h1 className="text-3xl font-bold text-gray-800">{count}</h1>
+          <button onClick={() => setShowLogin(true)}>👤</button>
         </div>
       </header>
-
-      <h2>getProfile</h2>
 
       <main className="flex-1 flex flex-col items-center justify-center p-4 max-w-lg mx-auto w-full">
         {showInvalidWord && (
@@ -172,10 +186,15 @@ function App() {
       </main>
 
       <footer className="p-4 text-center text-gray-500 text-sm">
-        <p>Um clone do jogo Wordle em português</p>
-        <p className="mt-1">
-          {/* Palavra de hoje: <span className="text-xs">#{answer}</span> */}
-          Palavra de hoje: <span className="text-xs">#answer</span>
+        <p>
+          Um clone do jogo{" "}
+          <a
+            href="https://www.nytimes.com/games/wordle/index.html"
+            target="_blank"
+          >
+            Wordle
+          </a>{" "}
+          em português
         </p>
       </footer>
 
@@ -185,6 +204,17 @@ function App() {
         onClose={() => setShowStats(false)}
         gameResult={gameStatus === "playing" ? null : gameStatus}
         guessCount={guesses.length}
+      />
+
+      <LoginModal
+        isOpen={showLogin}
+        onClose={() => setShowLogin(false)}
+        username={username}
+        password={password}
+        setUsername={setUsername}
+        setPassword={setPassword}
+        login={login}
+        message={message}
       />
     </div>
   );

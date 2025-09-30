@@ -14,7 +14,7 @@ const JWT_SECRET = process.env.JWT_SECRET || "supersecretkey";
 const all5Words = fs.readFileSync("../all5.csv", "utf-8");
 
 function getWordOfTheDay() {
-  const startDate = new Date(2022, 0, 1); // January 1, 2024
+  const startDate = new Date(2020, 0, 1); // January 1, 2024
   const today = new Date();
   const diffTime = Math.abs(today - startDate);
   const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
