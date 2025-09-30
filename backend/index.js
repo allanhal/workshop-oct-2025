@@ -30,11 +30,13 @@ const wordToday = getWordOfTheDay();
 
 app.use(cors());
 
+app.use(express.json()); // middleware to parse JSON body
+
 // Demo user (in real case use DB)
 const user = {
   id: 1,
-  username: "allan",
-  password: await bcrypt.hash("123456", 10), // hashed password
+  username: "aa",
+  password: await bcrypt.hash("aa", 10), // hashed password
 };
 
 // Login route
@@ -54,7 +56,7 @@ app.post("/login", async (req, res) => {
     expiresIn: "1h",
   });
 
-  res.json({ token });
+  res.json({ token, profile: { id: user.id, username: user.username } });
 });
 
 // Middleware to check token

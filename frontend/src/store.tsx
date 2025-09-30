@@ -4,6 +4,8 @@ import { create } from 'zustand';
 const useStore = create((set) => ({
   profile: null,
   setProfile: (profile: unknown) => set(() => ({ profile })),
+  token: null,
+  setToken: (token: string) => set(() => ({ token })),
   count: 0,
   increase: () =>
     set((state: { count: number }) => ({ count: state.count + 1 })),

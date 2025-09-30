@@ -14,21 +14,8 @@ import { isValidWord } from './utils/words';
 function App() {
   const { profile, setProfile } = useStore();
   const [showLogin, setShowLogin] = useState(false);
-  const [username, setUsername] = useState("allan");
-  const [password, setPassword] = useState("123456");
   const [token, setToken] = useState(localStorage.getItem("token") || "");
   const [message, setMessage] = useState("");
-
-  const login = async () => {
-    try {
-      const res = await axios.post(`${API}/login`, { username, password });
-      localStorage.setItem("token", res.data.token);
-      setToken(res.data.token);
-      setMessage("Login successful!");
-    } catch (err) {
-      setMessage(`Login failed ${err}`);
-    }
-  };
 
   const getProfile = async () => {
     try {
@@ -153,12 +140,14 @@ function App() {
             📈
           </button>
           <h1 className="text-3xl font-bold text-gray-800">Termo</h1>
-          <button onClick={increase}>Increase</button>
-          <button onClick={decrease} style={{ margin: "0 10px" }}>
-            Decrease
-          </button>
-          <button onClick={reset}>Reset</button>
-          <h1 className="text-3xl font-bold text-gray-800">{count}</h1>
+          {/* <button onClick={increase}>Increase</button> */}
+          {/* <button onClick={decrease} style={{ margin: "0 10px" }}> */}
+          {/* Decrease */}
+          {/* </button> */}
+          {/* <button onClick={reset}>Reset</button> */}
+          <h1 className="text-3xl font-bold text-gray-800">
+            {profile && JSON.stringify(profile)}
+          </h1>
           <button onClick={() => setShowLogin(true)}>👤</button>
         </div>
       </header>
@@ -209,11 +198,6 @@ function App() {
       <LoginModal
         isOpen={showLogin}
         onClose={() => setShowLogin(false)}
-        username={username}
-        password={password}
-        setUsername={setUsername}
-        setPassword={setPassword}
-        login={login}
         message={message}
       />
     </div>
