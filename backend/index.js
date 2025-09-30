@@ -3,9 +3,13 @@ import cors from "cors";
 import { GoogleGenerativeAI } from "@google/generative-ai";
 import "dotenv/config.js";
 import fs from "fs";
+import jwt from "jsonwebtoken";
+import bcrypt from "bcryptjs";
 
 const app = express();
 const port = process.env.PORT || 8080;
+
+const JWT_SECRET = process.env.JWT_SECRET || "supersecretkey";
 
 const all5Words = fs.readFileSync("../all5.csv", "utf-8");
 
@@ -26,22 +30,73 @@ const wordToday = getWordOfTheDay();
 
 app.use(cors());
 
+// Demo user (in real case use DB)
+const user = {
+  id: 1,
+  username: "allan",
+  password: await bcrypt.hash("123456", 10), // hashed password
+};
+
+// Login route
+app.post("/login", async (req, res) => {
+  const { username, password } = req.body;
+
+  if (username !== user.username) {
+    return res.status(401).json({ message: "Invalid credentials" });
+  }
+
+  const valid = await bcrypt.compare(password, user.password);
+  if (!valid) {
+    return res.status(401).json({ message: "Invalid credentials" });
+  }
+
+  const token = jwt.sign({ id: user.id, username: user.username }, JWT_SECRET, {
+    expiresIn: "1h",
+  });
+
+  res.json({ token });
+});
+
+// Middleware to check token
+function authMiddleware(req, res, next) {
+  const authHeader = req.headers["authorization"];
+  const token = authHeader && authHeader.split(" ")[1];
+
+  if (!token) return res.status(401).json({ message: "Token required" });
+
+  jwt.verify(token, JWT_SECRET, (err, decoded) => {
+    if (err) return res.status(403).json({ message: "Invalid token" });
+
+    req.user = decoded;
+    next();
+  });
+}
+
+// Protected route
+app.get("/profile", authMiddleware, (req, res) => {
+  res.json({ message: `Hello ${req.user.username}`, user: req.user });
+});
+
 // http://localhost:8080/
+// https://workshop-oct-2025.onrender.com/
 app.get("/", (_, res) => {
   res.send(`Hello World!`);
 });
 
 // http://localhost:8080/today
+// https://workshop-oct-2025.onrender.com/today
 app.get("/today", (_, res) => {
   res.send(wordToday);
 });
 
 // http://localhost:8080/all
+// https://workshop-oct-2025.onrender.com/all
 app.get("/all", (_, res) => {
   res.send(all5Words);
 });
 
 // http://localhost:8080/guess?word=mesma
+// https://workshop-oct-2025.onrender.com/guess?word=mesma
 app.get("/guess", (req, res) => {
   const { word } = req.query;
   if (!word || typeof word !== "string" || word.length !== 5) {
@@ -72,6 +127,7 @@ app.get("/guess", (req, res) => {
 });
 
 // http://localhost:8080/exist?word=teste
+// https://workshop-oct-2025.onrender.com/exist?word=teste
 app.get("/valid", async (req, res) => {
   const { word } = req.query;
   if (!word || typeof word !== "string") {
@@ -90,6 +146,7 @@ app.get("/valid", async (req, res) => {
 });
 
 // http://localhost:8080/ia?word=teste
+// https://workshop-oct-2025.onrender.com/ia?word=teste
 app.get("/ia", (req, res) => {
   const { word } = req.query;
   if (!word || typeof word !== "string") {

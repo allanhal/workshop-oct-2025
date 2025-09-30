@@ -1,3 +1,8 @@
+// import 'dotenv/config.js';
+
+// export const API = process.env.API || "http://localhost:8080";
+export const API = "http://localhost:8080";
+
 export type LetterStatus = "correct" | "present" | "absent" | "empty";
 
 export interface GameStats {
@@ -13,7 +18,8 @@ export async function checkGuess(guess: string): Promise<{
   correct: boolean;
   result: LetterStatus[];
 }> {
-  const requestGuess = await fetch(`http://localhost:8080/guess?word=${guess}`);
+  API;
+  const requestGuess = await fetch(`${API}/guess?word=${guess}`);
   const guessResult = await requestGuess.json();
   return guessResult;
 }

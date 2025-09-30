@@ -1,14 +1,43 @@
+import axios from 'axios';
 import { useEffect, useState } from 'react';
 
 import GameStatsModal from './components/GameStats';
 import Grid from './components/Grid';
 import Keyboard from './components/Keyboard';
 import {
-    checkGuess, getGameStats, getKeyboardStatus, LetterStatus, updateGameStats
+    API, checkGuess, getGameStats, getKeyboardStatus, LetterStatus, updateGameStats
 } from './utils/gameLogic';
 import { isValidWord } from './utils/words';
 
 function App() {
+  const [username, setUsername] = useState("allan");
+  const [password, setPassword] = useState("123456");
+  const [profile, setProfile] = useState();
+  const [token, setToken] = useState(localStorage.getItem("token") || "");
+  const [message, setMessage] = useState("");
+
+  const login = async () => {
+    try {
+      const res = await axios.post(`${API}/login`, { username, password });
+      localStorage.setItem("token", res.data.token);
+      setToken(res.data.token);
+      setMessage("Login successful!");
+    } catch (err) {
+      setMessage(`Login failed ${err}`);
+    }
+  };
+
+  const getProfile = async () => {
+    try {
+      const res = await axios.get(`${API}/profile`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      setMessage(res.data.message);
+    } catch (err) {
+      setMessage(`Unauthorized  ${err}`);
+    }
+  };
+
   const [guesses, setGuesses] = useState<string[]>([]);
   const [currentGuess, setCurrentGuess] = useState("");
   const [results, setResults] = useState<LetterStatus[][]>([]);
@@ -21,6 +50,21 @@ function App() {
 
   const currentRow = guesses.length;
   const keyboardStatus = getKeyboardStatus(guesses, results);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        console.log(1);
+        console.log(await getProfile());
+      } catch (err) {
+        console.error(err);
+      }
+    };
+
+    // call it
+    fetchData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   useEffect(() => {
     const handleKeydown = (e: KeyboardEvent) => {
@@ -102,6 +146,8 @@ function App() {
           <h1 className="text-3xl font-bold text-gray-800">Termo</h1>
         </div>
       </header>
+
+      <h2>getProfile</h2>
 
       <main className="flex-1 flex flex-col items-center justify-center p-4 max-w-lg mx-auto w-full">
         {showInvalidWord && (
