@@ -9,7 +9,7 @@ interface BugReportProps {
   onClose: () => void;
 }
 
-export default function BugReport({ isOpen, onClose }: BugReportProps) {
+export default function BugReportModal({ isOpen, onClose }: BugReportProps) {
   if (!isOpen) return null;
 
   const [name, setName] = useState("");

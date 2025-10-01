@@ -1,7 +1,4 @@
-// import 'dotenv/config.js';
-
-// export const API = process.env.API || "http://localhost:8080";
-export const API = "http://localhost:8080";
+export const API = import.meta.env.VITE_API || "http://localhost:8080";
 
 export type LetterStatus = "correct" | "present" | "absent" | "empty";
 
@@ -18,7 +15,6 @@ export async function checkGuess(guess: string): Promise<{
   correct: boolean;
   result: LetterStatus[];
 }> {
-  
   const requestGuess = await fetch(`${API}/guess?word=${guess}`);
   const guessResult = await requestGuess.json();
   return guessResult;
@@ -84,4 +80,15 @@ export function updateGameStats(won: boolean, guessCount: number): GameStats {
 
   localStorage.setItem("termo-stats", JSON.stringify(stats));
   return stats;
+}
+
+export async function isValidWord(word: string): Promise<boolean> {
+  const all5WordsRequest = await fetch("/all5.csv");
+  const all5WordsText = await all5WordsRequest.text();
+  const all5Words = all5WordsText
+    .split(",")
+    .map((word) => word.trim().toLowerCase());
+
+  if (word.length !== 5) return false;
+  return all5Words.includes(word.toLowerCase());
 }

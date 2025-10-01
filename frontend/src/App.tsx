@@ -1,13 +1,12 @@
 import { useEffect, useRef, useState } from 'react';
 
-import BugReport from './components/BugReportModal';
+import BugReportModal from './components/BugReportModal';
 import GameStatsModal from './components/GameStats';
 import Grid from './components/Grid';
 import Keyboard from './components/Keyboard';
 import {
-    checkGuess, getGameStats, getKeyboardStatus, LetterStatus, updateGameStats
+    checkGuess, getGameStats, getKeyboardStatus, isValidWord, LetterStatus, updateGameStats
 } from './utils/gameLogic';
-import { isValidWord } from './utils/words';
 
 function App() {
   const [showBugReport, setShowBugReport] = useState(false);
@@ -73,30 +72,30 @@ function App() {
               triggerShake();
               return;
             }
+            const validWord = await isValidWord(currentGuess);
 
-            if (await !isValidWord(currentGuess)) {
+            if (validWord) {
+              const result = await checkGuess(currentGuess);
+
+              const newGuesses = [...guesses, currentGuess];
+              const newResults = [...results, result.result];
+
+              setGuesses(newGuesses);
+              setResults(newResults);
+              setCurrentGuess("");
+
+              if (result.correct) {
+                setGameStatus("won");
+              }
+
+              // Check loose condition
+              if (newGuesses.length >= 6) {
+                setGameStatus("lost");
+              }
+            } else {
               setShowInvalidWord(true);
               triggerShake();
               setTimeout(() => setShowInvalidWord(false), 2000);
-              return;
-            }
-
-            const result = await checkGuess(currentGuess);
-
-            const newGuesses = [...guesses, currentGuess];
-            const newResults = [...results, result.result];
-
-            setGuesses(newGuesses);
-            setResults(newResults);
-            setCurrentGuess("");
-
-            if (result.correct) {
-              setGameStatus("won");
-            }
-
-            // Check loose condition
-            if (newGuesses.length >= 6) {
-              setGameStatus("lost");
             }
           } else if (key === "BACKSPACE") {
             setCurrentGuess((prev) => prev.slice(0, -1));
@@ -173,7 +172,7 @@ function App() {
         guessCount={guesses.length}
       />
 
-      <BugReport
+      <BugReportModal
         isOpen={showBugReport}
         onClose={() => setShowBugReport(false)}
       />
