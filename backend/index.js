@@ -6,7 +6,10 @@ import fs from "fs";
 import jwt from "jsonwebtoken";
 import bcrypt from "bcryptjs";
 
+import { PrismaClient } from "@prisma/client";
+
 const app = express();
+const prisma = new PrismaClient();
 const port = process.env.PORT || 8080;
 
 const JWT_SECRET = process.env.JWT_SECRET || "supersecretkey";
@@ -32,51 +35,20 @@ app.use(cors());
 
 app.use(express.json()); // middleware to parse JSON body
 
-// Demo user (in real case use DB)
-const user = {
-  id: 1,
-  username: "aa",
-  password: await bcrypt.hash("aa", 10), // hashed password
-};
-
-// Login route
-app.post("/login", async (req, res) => {
-  const { username, password } = req.body;
-
-  if (username !== user.username) {
-    return res.status(401).json({ message: "Invalid credentials" });
-  }
-
-  const valid = await bcrypt.compare(password, user.password);
-  if (!valid) {
-    return res.status(401).json({ message: "Invalid credentials" });
-  }
-
-  const token = jwt.sign({ id: user.id, username: user.username }, JWT_SECRET, {
-    expiresIn: "1h",
+// https://console.neon.tech/app/projects/quiet-union-77601480/branches/br-damp-king-ad4h1ax4/tables
+// Rota para criar bug report
+app.post("/bugReport", async (req, res) => {
+  const { name, description } = req.body;
+  const bug = await prisma.bugReport.create({
+    data: { name, description },
   });
-
-  res.json({ token, profile: { id: user.id, username: user.username } });
+  res.json(bug);
 });
 
-// Middleware to check token
-function authMiddleware(req, res, next) {
-  const authHeader = req.headers["authorization"];
-  const token = authHeader && authHeader.split(" ")[1];
-
-  if (!token) return res.status(401).json({ message: "Token required" });
-
-  jwt.verify(token, JWT_SECRET, (err, decoded) => {
-    if (err) return res.status(403).json({ message: "Invalid token" });
-
-    req.user = decoded;
-    next();
-  });
-}
-
-// Protected route
-app.get("/profile", authMiddleware, (req, res) => {
-  res.json({ message: `Hello ${req.user.username}`, user: req.user });
+// Rota para listar todos os bugs
+app.get("/bug", async (_, res) => {
+  const bugs = await prisma.bugReport.findMany();
+  res.json(bugs);
 });
 
 // http://localhost:8080/
@@ -99,14 +71,34 @@ app.get("/all", (_, res) => {
 
 // http://localhost:8080/guess?word=mesma
 // https://workshop-oct-2025.onrender.com/guess?word=mesma
-app.get("/guess", (req, res) => {
-  const { word } = req.query;
+app.get("/guess", async (req, res) => {
+  let { word } = req.query;
   if (!word || typeof word !== "string" || word.length !== 5) {
     return res.status(400).send("Missing or invalid 'word' query parameter");
   }
 
+  word = word.toLowerCase();
+
+  const existing = await prisma.wordAttempt
+    .findUnique({
+      where: { word },
+    })
+    .catch(() => null);
+
+  let attempt;
+  if (existing) {
+    attempt = await prisma.wordAttempt.update({
+      where: { word },
+      data: { attempts: { increment: 1 } },
+    });
+  } else {
+    attempt = await prisma.wordAttempt.create({
+      data: { word },
+    });
+  }
+
   const answerLetters = wordToday.toLowerCase().split("");
-  const guessLetters = word.toLowerCase().split("");
+  const guessLetters = word.split("");
 
   const result = new Array(5).fill("absent");
   // First pass: mark correct letters
@@ -125,7 +117,11 @@ app.get("/guess", (req, res) => {
       answerLetters[answerIndex] = "";
     }
   }
-  res.send({ correct: result.every((letter) => letter === "correct"), result });
+  res.send({
+    correct: result.every((letter) => letter === "correct"),
+    result,
+    attempt,
+  });
 });
 
 // http://localhost:8080/exist?word=teste

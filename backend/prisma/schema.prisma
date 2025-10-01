@@ -1,0 +1,24 @@
+// https://console.neon.tech/app/projects/quiet-union-77601480/branches/br-damp-king-ad4h1ax4/tables
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model BugReport {
+  id          Int      @id @default(autoincrement())
+  name        String
+  description String
+  status      String   @default("open") // open, in_progress, closed
+  createdAt   DateTime @default(now())
+}
+
+model WordAttempt {
+  id        Int      @id @default(autoincrement())
+  word      String   @unique
+  attempts  Int      @default(1)
+  createdAt DateTime @default(now())
+}

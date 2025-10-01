@@ -18,7 +18,7 @@ export async function checkGuess(guess: string): Promise<{
   correct: boolean;
   result: LetterStatus[];
 }> {
-  API;
+  
   const requestGuess = await fetch(`${API}/guess?word=${guess}`);
   const guessResult = await requestGuess.json();
   return guessResult;
