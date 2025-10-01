@@ -80,6 +80,10 @@ app.get("/", (_, res) => {
   res.send(`Hello World!`);
 });
 
+app.get("/p", (_, res) => {
+  res.send(`p`);
+});
+
 // Rota para saber a palavra do dia
 // http://localhost:8080/today
 // https://workshop-oct-2025.onrender.com/today
