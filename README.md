@@ -44,3 +44,32 @@ Utilizaremos as bibliotecas:
 - Cors
 - Prisma
 - Google Generative AI
+
+Agenda:
+
+Dia 1
+
+- Apresentação
+- Iniciar com uma aplicação simples de frontend
+  - Currículo
+  - Bandas favoritas
+  - Contador de clicks
+  - Página de evento
+- Iniciar com uma aplicação simples de backend
+
+  - Currículo
+  - Bandas favoritas
+  - Contador de clicks
+  - Página de evento
+
+- Subir no vercel
+
+Dia 2
+
+- Subir no Render
+- Subir no Netlify
+
+Dia 3
+
+- Subir no Oracle
+- Subir no DigitalOcean
