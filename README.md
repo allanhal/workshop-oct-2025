@@ -1,28 +1,35 @@
-termooo-clone
+# termooo-clone
 
 TODO
 
-[ ] - Subir Digital Ocean
-[ ] - Subir Netlify
+- [ ] Subir Digital Ocean
+- [ ] Subir Netlify
 
-[ X ] - Limpar código
-[ X ] - Databaase: Bug request
-[ X ] - Database: Guess
+- [ X ] Limpar código
+- [ X ] Database: Bug request
+- [ X ] Database: Guess
+
+---
+
+---
 
 Descrição do curso:
 
 O curso vai utilizar tecnologias como Node + React + Postgres.
 Iremos iniciar uma aplicação do zero e disponibilizar ela de maneira pública na internet.
+
 Mostraremos plataformas como:
 
-- Grátis:
+Grátis:
+
 - Vercel
 - Render
 - Netlify
 - Oracle
 - Digital Ocean
 
-- Pagos:
+Pagos:
+
 - Railway
 - Heroku
 - Registro.br
@@ -45,6 +52,10 @@ Utilizaremos as bibliotecas:
 - Prisma
 - Google Generative AI
 
+---
+
+---
+
 Agenda:
 
 Dia 1
@@ -61,6 +72,7 @@ Dia 1
   - Bandas favoritas
   - Contador de clicks
   - Página de evento
+  - Relógio
 
 - Subir no vercel
 
