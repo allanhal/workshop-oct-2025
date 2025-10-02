@@ -1,4 +1,4 @@
-export const API = import.meta.env.VITE_API || "http://localhost:80";
+export const API = import.meta.env.VITE_API || "http://localhost:8080";
 
 export type LetterStatus = "correct" | "present" | "absent" | "empty";
 

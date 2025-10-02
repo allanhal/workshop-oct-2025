@@ -19,7 +19,7 @@ try {
   const prisma = new PrismaClient();
 
   // definindo a porta de escuta do servidor
-  const port = process.env.PORT || 80;
+  const port = process.env.PORT || 8080;
 
   // lendo o arquivo CSV com todas as palavras de 5 letras
   const all5Words = fs.readFileSync("../all5.csv", "utf-8");
