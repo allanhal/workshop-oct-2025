@@ -24,13 +24,16 @@ Grátis:
 
 - Vercel
 - Render
-- Netlify
+- Koyeb
+- Railway
+
+Complexo:
+
 - Oracle
-- Digital Ocean
+- Netlify
 
 Pagos:
 
-- Railway
 - Heroku
 - Registro.br
 - GoDaddy
@@ -38,6 +41,7 @@ Pagos:
 - Cloudflare
 - Fly.io
 - Northflank
+- Digital Ocean
 
 Utilizaremos as bibliotecas:
 
