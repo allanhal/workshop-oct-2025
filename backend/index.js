@@ -46,7 +46,8 @@ try {
   }
 
   // obtendo a palavra do dia
-  const wordToday = await getWordOfTheDay();
+  // const wordToday = await getWordOfTheDay();
+  const wordToday = "amigo";
 
   // aplicando o middleware cors para permitir requisições de qualquer origem
   app.use(cors());
