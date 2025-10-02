@@ -22,7 +22,12 @@ try {
   const port = process.env.PORT || 8080;
 
   // lendo o arquivo CSV com todas as palavras de 5 letras
-  const all5Words = fs.readFileSync("../all5.csv", "utf-8");
+  let all5Words;
+  try {
+    all5Words = fs.readFileSync("../all5.csv", "utf-8");
+  } catch (err) {
+    all5Words = fs.readFileSync("./all5.csv", "utf-8");
+  }
 
   // função para obter a palavra do dia com base na data atual
   let startDate; // January 1, 2024

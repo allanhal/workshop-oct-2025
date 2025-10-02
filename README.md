@@ -78,7 +78,7 @@ Dia 1
 
 Dia 2
 
-- Subir no Render
+- Subir no Render (com cronjob 10 min)
 - Subir no Netlify
 
 Dia 3
