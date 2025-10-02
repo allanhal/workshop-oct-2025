@@ -15,7 +15,7 @@ TODO
 
 Descrição do curso:
 
-O curso vai utilizar tecnologias como Node + React + Postgres.
+O curso vai utilizar tecnologias como Node + React + Postgres, é interessante ter conhecimentos nessas tecnologias.
 Iremos iniciar uma aplicação do zero e disponibilizar ela de maneira pública na internet.
 
 Mostraremos plataformas como:
@@ -71,21 +71,21 @@ Dia 1
   - Contador de clicks
   - Página de evento
 - Iniciar com uma aplicação simples de backend
-
   - Currículo
   - Bandas favoritas
   - Contador de clicks
   - Página de evento
   - Relógio
-
 - Subir no vercel
 
 Dia 2
 
+- Mostrar aplicação Termo
 - Subir no Render (com cronjob 10 min)
-- Subir no Netlify
+- Subir no Koyeb
+- Tira-dúvida
 
 Dia 3
 
-- Subir no Oracle
-- Subir no DigitalOcean
+- Finalização/Correções
+- Outros pequenos exemplos
