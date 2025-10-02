@@ -26,6 +26,8 @@ Grátis:
 - Render
 - Koyeb
 - Railway
+- Supabase
+- Neondb
 
 Complexo:
 
@@ -82,6 +84,7 @@ Dia 2
 
 - Mostrar aplicação Termo
 - Subir no Render (com cronjob 10 min)
+- Subir no Supabase
 - Subir no Koyeb
 - Tira-dúvida
 
