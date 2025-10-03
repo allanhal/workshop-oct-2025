@@ -25,7 +25,7 @@ function App() {
                 const image = getScreenshot();
                 try {
                   setLoading(true);
-                  const API = "http://localhost:8080";
+                  const API = import.meta.env.VITE_API || "http://localhost:8080";
                   const res = await axios.post(`${API}/calvo`, {
                     image,
                   });
