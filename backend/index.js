@@ -51,15 +51,15 @@ try {
   }
 
   // obtendo a palavra do dia
-  const wordToday = await getWordOfTheDay();
-  // const wordToday = "amigo";
+  // const wordToday = await getWordOfTheDay();
+  const wordToday = "amigo";
 
   // aplicando o middleware cors para permitir requisições de qualquer origem
   app.use(cors());
 
   // aplicando o middleware express.json para lidar com requisições JSON
   // necessário para pegar o body das requisições POST
-  app.use(express.json());
+  app.use(express.json({ limit: "20mb" })); // For JSON
 
   // Rota para criar bug report
   // http://localhost:8080/bugReport
@@ -190,6 +190,22 @@ try {
     const prompt = `Responda apenas TRUE ou FALSE.Essa palavra existe em portugues? '${word}'`;
     const result = await model.generateContent(prompt);
     return result.response.text() === "TRUE";
+  }
+
+  app.post("/calvo", async (req, res) => {
+    const { image } = req.body;
+    const result = await checkBaldness(image);
+    res.json(result);
+  });
+
+  async function checkBaldness(image) {
+    const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY || "");
+    const model = genAI.getGenerativeModel({
+      model: "gemini-2.5-flash",
+    });
+    const prompt = `Baseado nessa foto, essa pessoa está ficando careca?`;
+    const result = await model.generateContent([prompt, image]);
+    return result.response.text();
   }
 
   app.listen(port, () => {
