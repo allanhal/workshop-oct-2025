@@ -73,22 +73,21 @@ Dia 1
   - Contador de clicks
   - Página de evento
 - Iniciar com uma aplicação simples de backend
-  - Currículo
-  - Bandas favoritas
-  - Contador de clicks
-  - Página de evento
-  - Relógio
+  - Hello World
+  - Informar horário
+  - Pesquisa em IA
 - Subir no vercel
 
 Dia 2
 
 - Mostrar aplicação Termo
-- Subir no Render (com cronjob 10 min)
+- Subir no Render (~~com cronjob 10 min~~)
 - Subir no Supabase
-- Subir no Koyeb
+
 - Tira-dúvida
 
 Dia 3
 
+- Subir no Koyeb
 - Finalização/Correções
 - Outros pequenos exemplos
