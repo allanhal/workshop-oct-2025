@@ -23,6 +23,7 @@ Mostraremos plataformas como:
 Grátis:
 
 - Vercel
+- Netlify
 - Render
 - Koyeb
 - Railway
